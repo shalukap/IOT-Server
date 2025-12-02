@@ -60,4 +60,3 @@ app.get('/api/sensor-data/latest', async (req,res)=>{
   res.json(last || {});
 });
 
-app.listen(PORT, ()=>console.log(`Listening ${PORT}`));
