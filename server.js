@@ -1,16 +1,35 @@
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
+import express from "express";
+import bodyParser from "body-parser";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from 'dotenv';
+
+import cookieParser from "cookie-parser";
+
+dotenv.config();
+
+
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
+app.use(cors({origin:"http://localhost:5173",credentials: true}));
 
 const PORT = process.env.PORT || 5000;
 const API_KEY = process.env.API_KEY || 'changeme';
 
+let mongoUrl=process.env.MONGO_URI;
+
+mongoose.connect(mongoUrl)
+let connection =mongoose.connection;
+connection.once("open", () => {
+    console.log("MongoDB database connection established successfully");
+    
+});
+/*
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(()=>console.log('MongoDB connected'))
   .catch(e=>console.error('MongoDB failed', e));
-
+*/
 const sensorSchema = new mongoose.Schema({
   deviceId: { type: String, default: 'unknown' },
   temperature: Number, humidity: Number, soil: Number, pir: Boolean, relay: Boolean,
